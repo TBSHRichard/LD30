@@ -3,6 +3,7 @@ class window.LevelGameWindow extends GameWindow
 		super
 		
 		@setupCollisionLayer()
+		@setupDoorLayer()
 	
 	setupCollisionLayer: ->
 		@collisionLayer = new createjs.Container()
@@ -227,3 +228,39 @@ class window.LevelGameWindow extends GameWindow
 		@collisionLayer.addChild shape
 		
 		@addChild @collisionLayer
+	
+	setupDoorLayer: ->
+		@doorLayer = new createjs.Container()
+		
+		# Room 1 - Top
+		@doorLayer.addChild new Door 100, 100, @collisionLayer, Door.COLOR_GREEN, true, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 200, 200, @collisionLayer, Door.COLOR_RED, false, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 400, 100, @collisionLayer, Door.COLOR_GREEN, true, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 500, 100, @collisionLayer, Door.COLOR_GREEN, true, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 500, 200, @collisionLayer, Door.COLOR_GREEN, true, Door.ORIENTATION_PORTRAIT
+		
+		# Room 1 - Bottom
+		@doorLayer.addChild new Door 100, 500, @collisionLayer, Door.COLOR_RED, false, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 500, 500, @collisionLayer, Door.COLOR_GREEN, false, Door.ORIENTATION_PORTRAIT
+		
+		# Room 2 - Top
+		@doorLayer.addChild new Door 900, 200, @collisionLayer, Door.COLOR_GREEN, false, Door.ORIENTATION_LANDSCAPE
+		
+		# Room 2 - Bottom
+		@doorLayer.addChild new Door 1000, 500, @collisionLayer, Door.COLOR_GREEN, false, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 1300, 500, @collisionLayer, Door.COLOR_BLUE, false, Door.ORIENTATION_PORTRAIT
+		
+		# Room 3 - Top
+		@doorLayer.addChild new Door 1500, 200, @collisionLayer, Door.COLOR_RED, false, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 1700, 200, @collisionLayer, Door.COLOR_BLUE, true, Door.ORIENTATION_LANDSCAPE
+		@doorLayer.addChild new Door 1800, 200, @collisionLayer, Door.COLOR_GREEN, true, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 2000, 200, @collisionLayer, Door.COLOR_BLUE, false, Door.ORIENTATION_PORTRAIT
+		
+		# Room 3 - Bottom
+		@doorLayer.addChild new Door 1500, 500, @collisionLayer, Door.COLOR_RED, true, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 1600, 500, @collisionLayer, Door.COLOR_BLUE, false, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 1800, 500, @collisionLayer, Door.COLOR_GREEN, false, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 1800, 400, @collisionLayer, Door.COLOR_RED, false, Door.ORIENTATION_PORTRAIT
+		@doorLayer.addChild new Door 1800, 400, @collisionLayer, Door.COLOR_RED, false, Door.ORIENTATION_LANDSCAPE
+		
+		@addChild @doorLayer

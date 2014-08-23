@@ -49,7 +49,7 @@ class window.PreloaderGameWindow extends GameWindow
 		
 		Preloader.preload FILENAMES, ((e) ->
 				progressLogo.graphics.clear().beginBitmapFill(logo, "no-repeat", logoMatrix).drawRect WIDTH / 2 - 75, HEIGHT / 2 - 82, 150 * e.progress, 165
-				progressText.text = "#{Math.floor event.progress * 100}%"
+				progressText.text = "#{Math.floor e.progress * 100}%"
 				progressText.regX = progressText.getMeasuredWidth() / 2
 			), ((e) ->
 				loadedAssets = e.target
