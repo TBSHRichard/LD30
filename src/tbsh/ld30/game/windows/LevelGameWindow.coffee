@@ -1,12 +1,17 @@
 class window.LevelGameWindow extends GameWindow
+	constructor: (width, height, @assetQueue) ->
+		super width, height
+	
 	initialize: ->
 		super
 		
 		@setupCollisionLayer()
 		@setupDoorLayer()
+		@setupForeground()
 	
 	setupCollisionLayer: ->
 		@collisionLayer = new createjs.Container()
+		@collisionLayer.alpha = 0
 		
 		shape = new createjs.Shape()
 		shape.graphics.beginFill "#000"
@@ -264,3 +269,6 @@ class window.LevelGameWindow extends GameWindow
 		@doorLayer.addChild new Door 1800, 400, @collisionLayer, Door.COLOR_RED, false, Door.ORIENTATION_LANDSCAPE
 		
 		@addChild @doorLayer
+	
+	setupForeground: ->
+		@addChild new createjs.Bitmap @assetQueue.getResult "foreground"

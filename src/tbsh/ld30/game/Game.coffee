@@ -29,7 +29,6 @@ class window.Game
 			@fadestate = FADESTATE_IN
 	
 	setAssetQueue: (@assetQueue) ->
-		@setWindow new LevelGameWindow WIDTH, HEIGHT
 	
 	onTick: ->
 		if game.gameWindow

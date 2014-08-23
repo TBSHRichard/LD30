@@ -54,4 +54,5 @@ class window.PreloaderGameWindow extends GameWindow
 			), ((e) ->
 				loadedAssets = e.target
 				preWin.game.setAssetQueue loadedAssets
+				preWin.game.setWindow new LevelGameWindow WIDTH, HEIGHT, loadedAssets
 			)
