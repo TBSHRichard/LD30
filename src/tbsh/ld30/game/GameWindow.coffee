@@ -5,4 +5,6 @@ class window.GameWindow extends createjs.Container
 	initialize: ->
 		super
 	
+	setGame: (@game) ->
+	
 	onTick: ->

@@ -42,4 +42,4 @@ window.Main =
 		$("#gameContainer").html gameCanvas
 		$("#gameContainer").append gameControls
 		
-		new Game WIDTH, HEIGHT, new LevelGameWindow WIDTH, HEIGHT
+		new Game WIDTH, HEIGHT, new PreloaderGameWindow WIDTH, HEIGHT

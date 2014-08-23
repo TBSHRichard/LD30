@@ -2,6 +2,9 @@ FADESTATE_IN = 0
 FADESTATE_OFF = 1
 FADESTATE_OUT = 2
 
+WIDTH = 700
+HEIGHT = 600
+
 game = null
 
 class window.Game
@@ -19,10 +22,14 @@ class window.Game
 			@fadestate = FADESTATE_OUT
 		else
 			@gameWindow = @nextGameWindow
+			@gameWindow.setGame this
 			@stage.addChild @gameWindow
 			@nextGameWindow = null
 			@gameWindow.alpha = @gwAlpha
 			@fadestate = FADESTATE_IN
+	
+	setAssetQueue: (@assetQueue) ->
+		@setWindow new LevelGameWindow WIDTH, HEIGHT
 	
 	onTick: ->
 		if game.gameWindow
@@ -41,6 +48,7 @@ class window.Game
 					if game.gwAlpha <= 0
 						game.stage.removeChild game.gameWindow
 						game.gameWindow = game.nextGameWindow
+						game.gameWindow.setGame game
 						game.stage.addChild game.gameWindow
 						game.nextGameWindow = null
 						game.gameWindow.alpha = 0
