@@ -1,6 +1,6 @@
 Ludum Dare 48-Hour #30
 
-April 22 9:00PM EST - April 24 9:00PM EST
+August 22 9:00PM EST - August 24 9:00PM EST
 
 Game Title: Dimension Plane
 
