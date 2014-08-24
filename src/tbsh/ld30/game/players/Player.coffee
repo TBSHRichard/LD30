@@ -102,16 +102,23 @@ class window.Player extends createjs.Container
 				when Color.GREEN then @assetQueue.getResult "greenOrb"
 				when Color.BLUE then @assetQueue.getResult "blueOrb"
 			
-			@orbBitmap = new createjs.Bitmap asset
+			@orbBitmap = new Orb asset
 			@orbBitmap.regX = 35/2
 			@orbBitmap.regY = 35/2
-			@orbBitmap.x = -20
-			@orbBitmap.y = 5
+			@orbBitmap.x = -2
+			@orbBitmap.y = 15
 			@addChild @orbBitmap
+			
+			createjs.Tween.get(@orbBitmap, {loop: true}).
+				to({x: 37, y: 45}, 500, createjs.Ease.backInOut()).call(@swapBitmaps, [this]).
+				to({x: -2, y: 15}, 500, createjs.Ease.backInOut()).call(@swapBitmaps, [this])
 			
 			pedestal.removeOrb()
 			pedestal.linkedPedestal.removeOrb()
 			@levelWindow.drawDoorsToCollisionMap()
+	
+	swapBitmaps: (player) ->
+		player.swapChildren player.orbBitmap, player.playerSprite
 	
 	onTheGround: ->
 		@collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT) or @collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT-6) or @collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT-15) or

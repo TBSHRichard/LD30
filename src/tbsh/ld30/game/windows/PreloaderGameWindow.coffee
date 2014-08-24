@@ -5,6 +5,10 @@ FILENAMES = [
 	"greenOrb"
 	"blueOrb"
 	"character"
+	"xPlace"
+	"xPickup"
+	"zPlace"
+	"zPickup"
 ]
 
 WIDTH = 700

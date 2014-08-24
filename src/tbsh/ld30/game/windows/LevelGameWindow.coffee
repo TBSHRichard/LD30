@@ -6,6 +6,7 @@ class window.LevelGameWindow extends GameWindow
 		super
 		
 		@levelLayer = new createjs.Container()
+		@hintLayer = new createjs.Container()
 		@doors = []
 		
 		@setupCollisionMap()
@@ -17,6 +18,7 @@ class window.LevelGameWindow extends GameWindow
 		@setupTriggers()
 		
 		@addChild @levelLayer
+		@addChild @hintLayer
 	
 	setupCollisionMap: ->
 		shape = new createjs.Shape()
@@ -443,11 +445,11 @@ class window.LevelGameWindow extends GameWindow
 		bottomRoomTrigger.setLinkedTrigger topRoomTrigger
 		
 		# Room 1 A & F
-		pedestal1A = new PedestalTrigger "1A", 150, 125, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1A = new PedestalTrigger "1A", 150, 125, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal1A.setLinkedDoors @pedestal1ADoors
 		@room1TopTriggers.push pedestal1A
 		
-		pedestal1F = new PedestalTrigger "1F", 150, 425, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1F = new PedestalTrigger "1F", 150, 425, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		@room1BottomTriggers.push pedestal1F
 		
 		pedestal1A.setLinkedPedestal pedestal1F
@@ -457,11 +459,11 @@ class window.LevelGameWindow extends GameWindow
 		pedestal1F.setOrbColor Color.RED
 		
 		# Room 1 B & G
-		pedestal1B = new PedestalTrigger "1B", 150, 225, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1B = new PedestalTrigger "1B", 150, 225, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal1B.setLinkedDoors @pedestal1BDoors
 		@room1TopTriggers.push pedestal1B
 		
-		pedestal1G = new PedestalTrigger "1G", 150, 525, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1G = new PedestalTrigger "1G", 150, 525, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal1G.setLinkedDoors @pedestal1GDoors
 		@room1BottomTriggers.push pedestal1G
 		
@@ -469,21 +471,21 @@ class window.LevelGameWindow extends GameWindow
 		pedestal1G.setLinkedPedestal pedestal1B
 		
 		# Room 1 C & H
-		pedestal1C = new PedestalTrigger "1C", 450, 125, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1C = new PedestalTrigger "1C", 450, 125, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal1C.setLinkedDoors @pedestal1CDoors
 		@room1TopTriggers.push pedestal1C
 		
-		pedestal1H = new PedestalTrigger "1H", 450, 425, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1H = new PedestalTrigger "1H", 450, 425, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		@room1BottomTriggers.push pedestal1H
 		
 		pedestal1C.setLinkedPedestal pedestal1H
 		pedestal1H.setLinkedPedestal pedestal1C
 		
 		# Room 1 D & I
-		pedestal1D = new PedestalTrigger "1D", 350, 225, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1D = new PedestalTrigger "1D", 350, 225, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		@room1TopTriggers.push pedestal1D
 		
-		pedestal1I = new PedestalTrigger "1I", 350, 525, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1I = new PedestalTrigger "1I", 350, 525, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		@room1BottomTriggers.push pedestal1I
 		
 		pedestal1D.setLinkedPedestal pedestal1I
@@ -493,11 +495,11 @@ class window.LevelGameWindow extends GameWindow
 		pedestal1I.setOrbColor Color.BLUE
 		
 		# Room 1 E & J
-		pedestal1E = new PedestalTrigger "1E", 450, 225, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1E = new PedestalTrigger "1E", 450, 225, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal1E.setLinkedDoors @pedestal1EDoors
 		@room1TopTriggers.push pedestal1E
 		
-		pedestal1J = new PedestalTrigger "1J", 450, 525, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1J = new PedestalTrigger "1J", 450, 525, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal1J.setLinkedDoors @pedestal1JDoors
 		@room1BottomTriggers.push pedestal1J
 		
@@ -524,11 +526,11 @@ class window.LevelGameWindow extends GameWindow
 		bottomRoomTrigger.setLinkedTrigger topRoomTrigger
 		
 		# Room 2 A & D
-		pedestal2A = new PedestalTrigger "2A", 950, 225, this, @assetQueue, @pedestalBitmapLayer
+		pedestal2A = new PedestalTrigger "2A", 950, 225, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal2A.setLinkedDoors @pedestal2ADoors
 		@room2TopTriggers.push pedestal2A
 		
-		pedestal2D = new PedestalTrigger "2D", 950, 525, this, @assetQueue, @pedestalBitmapLayer
+		pedestal2D = new PedestalTrigger "2D", 950, 525, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal2D.setLinkedDoors @pedestal2DDoors
 		@room2BottomTriggers.push pedestal2D
 		
@@ -536,10 +538,10 @@ class window.LevelGameWindow extends GameWindow
 		pedestal2D.setLinkedPedestal pedestal2A
 		
 		# Room 2 B & E
-		pedestal2B = new PedestalTrigger "2B", 1050, 125, this, @assetQueue, @pedestalBitmapLayer
+		pedestal2B = new PedestalTrigger "2B", 1050, 125, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		@room2TopTriggers.push pedestal2B
 		
-		pedestal2E = new PedestalTrigger "2E", 1050, 425, this, @assetQueue, @pedestalBitmapLayer
+		pedestal2E = new PedestalTrigger "2E", 1050, 425, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		@room2BottomTriggers.push pedestal2E
 		
 		pedestal2B.setLinkedPedestal pedestal2E
@@ -549,10 +551,10 @@ class window.LevelGameWindow extends GameWindow
 		pedestal2E.setOrbColor Color.GREEN
 		
 		# Room 2 C & F
-		pedestal2C = new PedestalTrigger "2C", 1250, 225, this, @assetQueue, @pedestalBitmapLayer
+		pedestal2C = new PedestalTrigger "2C", 1250, 225, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		@room2TopTriggers.push pedestal2C
 		
-		pedestal2F = new PedestalTrigger "2F", 1250, 525, this, @assetQueue, @pedestalBitmapLayer
+		pedestal2F = new PedestalTrigger "2F", 1250, 525, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal2F.setLinkedDoors @pedestal2FDoors
 		@room2BottomTriggers.push pedestal2F
 		
@@ -579,11 +581,11 @@ class window.LevelGameWindow extends GameWindow
 		bottomRoomTrigger.setLinkedTrigger topRoomTrigger
 		
 		# Room 3 A & F
-		pedestal3A = new PedestalTrigger "3A", 1550, 225, this, @assetQueue, @pedestalBitmapLayer
+		pedestal3A = new PedestalTrigger "3A", 1550, 225, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal3A.setLinkedDoors @pedestal3ADoors
 		@room3TopTriggers.push pedestal3A
 		
-		pedestal3F = new PedestalTrigger "3F", 1550, 525, this, @assetQueue, @pedestalBitmapLayer
+		pedestal3F = new PedestalTrigger "3F", 1550, 525, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal3F.setLinkedDoors @pedestal3FDoors
 		@room3BottomTriggers.push pedestal3F
 		
@@ -591,11 +593,11 @@ class window.LevelGameWindow extends GameWindow
 		pedestal3F.setLinkedPedestal pedestal3A
 		
 		# Room 3 B & G
-		pedestal3B = new PedestalTrigger "3B", 1650, 225, this, @assetQueue, @pedestalBitmapLayer
+		pedestal3B = new PedestalTrigger "3B", 1650, 225, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal3B.setLinkedDoors @pedestal3BDoors
 		@room3TopTriggers.push pedestal3B
 		
-		pedestal3G = new PedestalTrigger "3G", 1650, 525, this, @assetQueue, @pedestalBitmapLayer
+		pedestal3G = new PedestalTrigger "3G", 1650, 525, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal3G.setLinkedDoors @pedestal3GDoors
 		@room3BottomTriggers.push pedestal3G
 		
@@ -603,11 +605,11 @@ class window.LevelGameWindow extends GameWindow
 		pedestal3G.setLinkedPedestal pedestal3B
 		
 		# Room 3 C & H
-		pedestal3C = new PedestalTrigger "3C", 1750, 225, this, @assetQueue, @pedestalBitmapLayer
+		pedestal3C = new PedestalTrigger "3C", 1750, 225, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal3C.setLinkedDoors @pedestal3CDoors
 		@room3TopTriggers.push pedestal3C
 		
-		pedestal3H = new PedestalTrigger "3H", 1750, 525, this, @assetQueue, @pedestalBitmapLayer
+		pedestal3H = new PedestalTrigger "3H", 1750, 525, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal3H.setLinkedDoors @pedestal3HDoors
 		@room3BottomTriggers.push pedestal3H
 		
@@ -615,10 +617,10 @@ class window.LevelGameWindow extends GameWindow
 		pedestal3H.setLinkedPedestal pedestal3C
 		
 		# Room 3 D & I
-		pedestal3D = new PedestalTrigger "3D", 1850, 125, this, @assetQueue, @pedestalBitmapLayer
+		pedestal3D = new PedestalTrigger "3D", 1850, 125, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		@room3TopTriggers.push pedestal3D
 		
-		pedestal3I = new PedestalTrigger "3I", 1850, 425, this, @assetQueue, @pedestalBitmapLayer
+		pedestal3I = new PedestalTrigger "3I", 1850, 425, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal3I.setLinkedDoors @pedestal3IDoors
 		@room3BottomTriggers.push pedestal3I
 		
@@ -626,11 +628,11 @@ class window.LevelGameWindow extends GameWindow
 		pedestal3I.setLinkedPedestal pedestal3D
 		
 		# Room 3 E & J
-		pedestal3E = new PedestalTrigger "3E", 2050, 125, this, @assetQueue, @pedestalBitmapLayer
+		pedestal3E = new PedestalTrigger "3E", 2050, 125, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		pedestal3E.setLinkedDoors @pedestal3EDoors
 		@room3TopTriggers.push pedestal3E
 		
-		pedestal3J = new PedestalTrigger "3J", 2050, 425, this, @assetQueue, @pedestalBitmapLayer
+		pedestal3J = new PedestalTrigger "3J", 2050, 425, this, @assetQueue, @pedestalBitmapLayer, @hintLayer
 		@room3BottomTriggers.push pedestal3J
 		
 		pedestal3E.setLinkedPedestal pedestal3J
