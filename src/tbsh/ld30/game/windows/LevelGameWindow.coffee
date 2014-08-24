@@ -5,6 +5,7 @@ class window.LevelGameWindow extends GameWindow
 	initialize: ->
 		super
 		
+		@levelLayer = new createjs.Container()
 		@doors = []
 		
 		@setupCollisionMap()
@@ -13,7 +14,9 @@ class window.LevelGameWindow extends GameWindow
 		@drawDoorsToCollisionMap()
 		@setupPlayers()
 		@setupForeground()
-		@setupPedestalTriggers()
+		@setupTriggers()
+		
+		@addChild @levelLayer
 	
 	setupCollisionMap: ->
 		shape = new createjs.Shape()
@@ -21,7 +24,7 @@ class window.LevelGameWindow extends GameWindow
 		@collisionMap = shape
 		@collisionMap.alpha = 0
 		
-		@addChild @collisionMap
+		@levelLayer.addChild @collisionMap
 	
 	drawBaseCollisionMap: (g) ->
 		g.beginFill "#000"
@@ -233,6 +236,86 @@ class window.LevelGameWindow extends GameWindow
 		g.lineTo(2090.0, 100.0)
 		g.lineTo(2090.0, 190.0)
 		g.endFill()
+		
+		g.beginFill "#000"
+		g.moveTo(690.0, 200.0)
+		g.lineTo(700.0, 200.0)
+		g.lineTo(700.0, 290.0)
+		g.lineTo(690.0, 290.0)
+		g.lineTo(690.0, 200.0)
+		g.endFill()
+		
+		g.beginFill "#000"
+		g.moveTo(700.0, 200.0)
+		g.lineTo(710.0, 200.0)
+		g.lineTo(710.0, 290.0)
+		g.lineTo(700.0, 290.0)
+		g.lineTo(700.0, 200.0)
+		g.endFill()
+		
+		g.beginFill "#000"
+		g.moveTo(1390.0, 200.0)
+		g.lineTo(1400.0, 200.0)
+		g.lineTo(1400.0, 290.0)
+		g.lineTo(1390.0, 290.0)
+		g.lineTo(1490.0, 200.0)
+		g.endFill()
+		
+		g.beginFill "#000"
+		g.moveTo(1400.0, 200.0)
+		g.lineTo(1410.0, 200.0)
+		g.lineTo(1410.0, 290.0)
+		g.lineTo(1400.0, 290.0)
+		g.lineTo(1400.0, 200.0)
+		g.endFill()
+		
+		g.beginFill "#000"
+		g.moveTo(2090.0, 200.0)
+		g.lineTo(2100.0, 200.0)
+		g.lineTo(2100.0, 290.0)
+		g.lineTo(2090.0, 290.0)
+		g.lineTo(2090.0, 200.0)
+		g.endFill()
+		
+		g.beginFill "#000"
+		g.moveTo(690.0, 500.0)
+		g.lineTo(700.0, 500.0)
+		g.lineTo(700.0, 590.0)
+		g.lineTo(690.0, 590.0)
+		g.lineTo(690.0, 500.0)
+		g.endFill()
+		
+		g.beginFill "#000"
+		g.moveTo(700.0, 500.0)
+		g.lineTo(710.0, 500.0)
+		g.lineTo(710.0, 590.0)
+		g.lineTo(700.0, 590.0)
+		g.lineTo(700.0, 500.0)
+		g.endFill()
+		
+		g.beginFill "#000"
+		g.moveTo(1390.0, 500.0)
+		g.lineTo(1400.0, 500.0)
+		g.lineTo(1400.0, 590.0)
+		g.lineTo(1390.0, 590.0)
+		g.lineTo(1490.0, 500.0)
+		g.endFill()
+		
+		g.beginFill "#000"
+		g.moveTo(1400.0, 500.0)
+		g.lineTo(1410.0, 500.0)
+		g.lineTo(1410.0, 590.0)
+		g.lineTo(1400.0, 590.0)
+		g.lineTo(1400.0, 500.0)
+		g.endFill()
+		
+		g.beginFill "#000"
+		g.moveTo(2090.0, 500.0)
+		g.lineTo(2100.0, 500.0)
+		g.lineTo(2100.0, 590.0)
+		g.lineTo(2090.0, 590.0)
+		g.lineTo(2090.0, 500.0)
+		g.endFill()
 	
 	drawDoorsToCollisionMap: ->
 		@collisionMap.graphics.clear()
@@ -248,13 +331,13 @@ class window.LevelGameWindow extends GameWindow
 		
 		@pedestalBitmapLayer.addChild new createjs.Bitmap @assetQueue.getResult "pedestals"
 		
-		@addChild @pedestalBitmapLayer
+		@levelLayer.addChild @pedestalBitmapLayer
 		
 		overlayShape = new createjs.Shape()
 		overlayShape.graphics.beginFill "#000"
 		overlayShape.graphics.drawRect 0, 0, 2100, 600
 		overlayShape.alpha = 0.05
-		@addChild overlayShape
+		@levelLayer.addChild overlayShape
 	
 	setupDoorLayer: ->
 		@doorLayer = new createjs.Container()
@@ -312,7 +395,7 @@ class window.LevelGameWindow extends GameWindow
 		@pedestal3IDoors.push @addDoorToLayer new Door 1800, 400, this, Color.RED, false, Orientation.PORTRAIT
 		@pedestal3IDoors.push @addDoorToLayer new Door 1800, 400, this, Color.RED, false, Orientation.LANDSCAPE
 		
-		@addChild @doorLayer
+		@levelLayer.addChild @doorLayer
 	
 	addDoorToLayer: (door) ->
 		@doorLayer.addChild door
@@ -328,23 +411,33 @@ class window.LevelGameWindow extends GameWindow
 		@bottomPlayer.x = 25
 		@bottomPlayer.y = 520
 		
-		@addChild @topPlayer
-		@addChild @bottomPlayer
+		@levelLayer.addChild @topPlayer
+		@levelLayer.addChild @bottomPlayer
 	
 	setupForeground: ->
-		@addChild new createjs.Bitmap @assetQueue.getResult "foreground"
+		@levelLayer.addChild new createjs.Bitmap @assetQueue.getResult "foreground"
 	
-	setupPedestalTriggers: ->
-		# Room 1 A & F
-		@room1TopPedestals = []
-		@room1BottomPedestals = []
+	setupTriggers: ->
+		@room1TopTriggers = []
+		@room1BottomTriggers = []
 		
+		# Room 1 Room Triggers
+		topRoomTrigger = new TopRoomTrigger 684, 200, Direction.RIGHT, @unwatchTriggersInRoom1, this, @topPlayer
+		@room1TopTriggers.push topRoomTrigger
+		
+		bottomRoomTrigger = new RoomTrigger 684, 500, Direction.RIGHT, @unwatchTriggersInRoom1, this, @bottomPlayer
+		@room1BottomTriggers.push bottomRoomTrigger
+		
+		topRoomTrigger.setLinkedTrigger bottomRoomTrigger
+		bottomRoomTrigger.setLinkedTrigger topRoomTrigger
+		
+		# Room 1 A & F
 		pedestal1A = new PedestalTrigger "1A", 150, 125, this, @assetQueue, @pedestalBitmapLayer
 		pedestal1A.setLinkedDoors @pedestal1ADoors
-		@room1TopPedestals.push pedestal1A
+		@room1TopTriggers.push pedestal1A
 		
 		pedestal1F = new PedestalTrigger "1F", 150, 425, this, @assetQueue, @pedestalBitmapLayer
-		@room1BottomPedestals.push pedestal1F
+		@room1BottomTriggers.push pedestal1F
 		
 		pedestal1A.setLinkedPedestal pedestal1F
 		pedestal1F.setLinkedPedestal pedestal1A
@@ -352,11 +445,11 @@ class window.LevelGameWindow extends GameWindow
 		# Room 1 B & G
 		pedestal1B = new PedestalTrigger "1B", 150, 225, this, @assetQueue, @pedestalBitmapLayer
 		pedestal1B.setLinkedDoors @pedestal1BDoors
-		@room1TopPedestals.push pedestal1B
+		@room1TopTriggers.push pedestal1B
 		
 		pedestal1G = new PedestalTrigger "1G", 150, 525, this, @assetQueue, @pedestalBitmapLayer
 		pedestal1G.setLinkedDoors @pedestal1GDoors
-		@room1BottomPedestals.push pedestal1G
+		@room1BottomTriggers.push pedestal1G
 		
 		pedestal1B.setLinkedPedestal pedestal1G
 		pedestal1G.setLinkedPedestal pedestal1B
@@ -364,11 +457,18 @@ class window.LevelGameWindow extends GameWindow
 		pedestal1A.setOrbColor Color.RED
 		pedestal1F.setOrbColor Color.RED
 		
-		@watchPedestalTriggersInRoom1()
+		@watchTriggersInRoom1()
 	
-	watchPedestalTriggersInRoom1: ->
-		for trigger in @room1TopPedestals
+	watchTriggersInRoom1: ->
+		for trigger in @room1TopTriggers
 			trigger.watchPlayer @topPlayer
 		
-		for trigger in @room1BottomPedestals
+		for trigger in @room1BottomTriggers
 			trigger.watchPlayer @bottomPlayer
+	
+	unwatchTriggersInRoom1: (levelWindow) ->
+		for trigger in levelWindow.room1TopTriggers
+			trigger.unwatchPlayer()
+		
+		for trigger in levelWindow.room1BottomTriggers
+			trigger.unwatchPlayer()

@@ -2,7 +2,7 @@ DIMEN = 35
 
 class window.PedestalTrigger extends Trigger
 	constructor: (@id, x, y, @levelWindow, @assetQueue, @bitmapLayer) ->
-		super x, y, DIMEN, DIMEN
+		super x, y, DIMEN, DIMEN, DIMEN/2, DIMEN/2
 		
 		@orbColor = null
 		@linkedPedestal = null
@@ -25,8 +25,10 @@ class window.PedestalTrigger extends Trigger
 			when Color.BLUE then @assetQueue.getResult "blueOrb"
 		
 		@orbBitmap = new createjs.Bitmap asset
-		@orbBitmap.x = @x - DIMEN/2
-		@orbBitmap.y = @y - DIMEN/2
+		@orbBitmap.x = @x
+		@orbBitmap.y = @y
+		@orbBitmap.regX = DIMEN/2
+		@orbBitmap.regY = DIMEN/2
 		@bitmapLayer.addChild @orbBitmap
 	
 	removeOrb: ->
@@ -41,7 +43,7 @@ class window.PedestalTrigger extends Trigger
 		player = data.player
 		trigger = data.trigger
 		
-		if @isTriggered
+		if trigger.isTriggered
 			player.setNearbyPedestal trigger
 		else
 			player.removeNearbyPedestal trigger

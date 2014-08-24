@@ -1,12 +1,12 @@
 class window.Trigger
-	constructor: (@x, @y, @width, @height) ->
+	constructor: (@x, @y, @width, @height, @regX = 0, @regY = 0) ->
 		@isTriggered = false
 	
 	watchPlayer: (player) ->
-		createjs.Ticker.on "tick", @onTick, null, false, {player: player, trigger: this}
+		@listener = createjs.Ticker.on "tick", @onTick, null, false, {player: player, trigger: this}
 	
 	unwatchPlayer: ->
-		createjs.Ticker.off "tick", @onTick
+		createjs.Ticker.off "tick", @listener
 	
 	onTick: (e, data) ->
 		player = data.player
@@ -17,10 +17,10 @@ class window.Trigger
 		playerTop = player.y
 		playerBottom = player.y + Player.HEIGHT
 		
-		triggerLeft = trigger.x - trigger.width/2
-		triggerRight = trigger.x + trigger.width/2
-		triggerTop = trigger.y - trigger.height/2
-		triggerBottom = trigger.y + trigger.height/2
+		triggerLeft = trigger.x - trigger.regX
+		triggerRight = trigger.x + trigger.width - trigger.regX
+		triggerTop = trigger.y - trigger.regY
+		triggerBottom = trigger.y + trigger.height - trigger.regY
 		
-		@isTriggered = ((playerLeft > triggerLeft and playerLeft < triggerRight) or (playerRight > triggerLeft and playerRight < triggerRight)) and
+		trigger.isTriggered = ((playerLeft > triggerLeft and playerLeft < triggerRight) or (playerRight > triggerLeft and playerRight < triggerRight)) and
 			((playerBottom > triggerTop and playerBottom < triggerBottom) or (playerTop > triggerTop and playerTop < triggerBottom))

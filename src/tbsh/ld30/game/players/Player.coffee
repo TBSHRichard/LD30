@@ -15,7 +15,7 @@ class window.Player extends createjs.Container
 		@xVelocity = 0
 		@yVelocity = 0
 		@jumpCooldown = 0
-		@jumpIsCoolingDown = @interactionIsCoolingDown = @isMovingLeft = @isMovingRight = false
+		@controlsMuted = @jumpIsCoolingDown = @interactionIsCoolingDown = @isMovingLeft = @isMovingRight = false
 		
 		@initialize()
 	
@@ -30,20 +30,21 @@ class window.Player extends createjs.Container
 		player = this
 		
 		$(document).keydown (e) ->
-			if e.keyCode == JUMP_KEY
-				if not player.jumpIsCoolingDown and player.jumpCooldown is 0 and player.onTheGround()
-					player.jumpIsCoolingDown = true
-					player.jumpCooldown = 4
-					player.y -= 3
-					player.yVelocity = JUMP_VELOCITY
-			if e.keyCode == MOVE_LEFT_KEY
-				player.isMovingLeft = true
-			if e.keyCode == MOVE_RIGHT_KEY
-				player.isMovingRight = true
-			if e.keyCode == player.interactionKey
-				unless player.interactionIsCoolingDown or player.nearbyPedestal is null
-					player.interactionIsCoolingDown = true
-					player.interact player.nearbyPedestal
+			unless @controlsMuted
+				if e.keyCode == JUMP_KEY
+					if not player.jumpIsCoolingDown and player.jumpCooldown is 0 and player.onTheGround()
+						player.jumpIsCoolingDown = true
+						player.jumpCooldown = 4
+						player.y -= 3
+						player.yVelocity = JUMP_VELOCITY
+				if e.keyCode == MOVE_LEFT_KEY
+					player.isMovingLeft = true
+				if e.keyCode == MOVE_RIGHT_KEY
+					player.isMovingRight = true
+				if e.keyCode == player.interactionKey
+					unless player.interactionIsCoolingDown or player.nearbyPedestal is null
+						player.interactionIsCoolingDown = true
+						player.interact player.nearbyPedestal
 		
 		$(document).keyup (e) ->
 			if e.keyCode == JUMP_KEY
@@ -128,4 +129,7 @@ class window.Player extends createjs.Container
 		player.y += player.yVelocity
 		
 		player.x = Math.floor(player.x / 100) * 100 + 10 if player.ranLeftIntoWall()
-		player.x = Math.floor(player.x / 100) * 100 + 100 - player.constructor.WIDTH if player.ranRightIntoWall()
+		if player.ranRightIntoWall()
+			baseInt = Math.floor(player.x / 100)
+			modifier = if baseInt % 7 == 6 then 10 else 0
+			player.x = baseInt * 100 + 100 - player.constructor.WIDTH - modifier
