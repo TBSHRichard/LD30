@@ -12,6 +12,7 @@ class window.RoomTrigger extends Trigger
 		level = @levelWindow.levelLayer
 		
 		player.controlsMuted = true
+		player.playerSprite.gotoAndPlay "run"
 		@unwatchFunction levelWindow
 		
 		levelLayerTo = level.x
@@ -22,6 +23,7 @@ class window.RoomTrigger extends Trigger
 		
 		createjs.Tween.get(level).to({x: levelLayerTo}, 700).call ->
 			player.controlsMuted = false
+			player.playerSprite.gotoAndPlay "idle"
 			watchFunction levelWindow
 		createjs.Tween.get(player).to({x: playerLayerTo}, 700)
 		createjs.Tween.get(otherPlayer).to({x: playerLayerTo}, 700)

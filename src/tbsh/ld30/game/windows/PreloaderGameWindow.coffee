@@ -4,6 +4,7 @@ FILENAMES = [
 	"redOrb"
 	"greenOrb"
 	"blueOrb"
+	"character"
 ]
 
 WIDTH = 700

@@ -6,6 +6,9 @@ JUMP_KEY = 38
 MOVE_LEFT_KEY = 37
 MOVE_RIGHT_KEY = 39
 
+ANIMATION_IDLE = "idle"
+ANIMATION_RUNNING = "run"
+
 class window.Player extends createjs.Container
 	@WIDTH = 35
 	@HEIGHT = 60
@@ -22,9 +25,22 @@ class window.Player extends createjs.Container
 	initialize: ->
 		super
 		
-		@playerSprite = new createjs.Shape
-		@playerSprite.graphics.beginFill "#0ff"
-		@playerSprite.graphics.drawRect 0, 0, @constructor.WIDTH, @constructor.HEIGHT
+		spriteSheet = new createjs.SpriteSheet {
+			images: [@assetQueue.getResult "character"]
+			frames: {width: 35, height: 60}
+			animations: {
+				idle: {
+					frames: [1]
+					next: ANIMATION_IDLE
+				}
+				run: {
+					frames: [10, 9, 10, 11, 12, 13, 14, 13, 12, 11]
+					next: ANIMATION_RUNNING
+				}
+			}
+		}
+		
+		@playerSprite = new createjs.Sprite spriteSheet, ANIMATION_IDLE
 		@addChild @playerSprite
 		
 		player = this
@@ -34,13 +50,17 @@ class window.Player extends createjs.Container
 				if e.keyCode == JUMP_KEY
 					if not player.jumpIsCoolingDown and player.jumpCooldown is 0 and player.onTheGround()
 						player.jumpIsCoolingDown = true
-						player.jumpCooldown = 4
+						player.jumpCooldown = 5
 						player.y -= 3
 						player.yVelocity = JUMP_VELOCITY
 				if e.keyCode == MOVE_LEFT_KEY
 					player.isMovingLeft = true
+					player.playerSprite.scaleX = 1
+					player.playerSprite.regX = 0
 				if e.keyCode == MOVE_RIGHT_KEY
 					player.isMovingRight = true
+					player.playerSprite.scaleX = -1
+					player.playerSprite.regX = Player.WIDTH
 				if e.keyCode == player.interactionKey
 					unless player.interactionIsCoolingDown or player.nearbyPedestal is null
 						player.interactionIsCoolingDown = true
@@ -94,8 +114,8 @@ class window.Player extends createjs.Container
 			@levelWindow.drawDoorsToCollisionMap()
 	
 	onTheGround: ->
-		@collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT) or @collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT-5) or @collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT-15) or
-			@collisionMap.hitTest(@x+@constructor.WIDTH-2, @y+@constructor.HEIGHT) or @collisionMap.hitTest(@x+@constructor.WIDTH-2, @y+@constructor.HEIGHT-5) or @collisionMap.hitTest(@x+@constructor.WIDTH-2, @y+@constructor.HEIGHT-15)
+		@collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT) or @collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT-6) or @collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT-15) or
+			@collisionMap.hitTest(@x+@constructor.WIDTH-2, @y+@constructor.HEIGHT) or @collisionMap.hitTest(@x+@constructor.WIDTH-2, @y+@constructor.HEIGHT-6) or @collisionMap.hitTest(@x+@constructor.WIDTH-2, @y+@constructor.HEIGHT-15)
 	
 	inTheCeiling: ->
 		@collisionMap.hitTest(@x+2, @y) or @collisionMap.hitTest(@x+2, @y+10) or @collisionMap.hitTest(@x+2, @y+20) or
@@ -125,12 +145,23 @@ class window.Player extends createjs.Container
 			
 			player.jumpCooldown -= 1 if player.jumpCooldown > 0
 		
-		player.x -= X_VELOCITY if player.isMovingLeft
-		player.x += X_VELOCITY if player.isMovingRight
+		xVelocity = 0
+		xVelocity -= X_VELOCITY if player.isMovingLeft
+		xVelocity  += X_VELOCITY if player.isMovingRight
+		
+		player.x += xVelocity
 		player.y += player.yVelocity
+		
+		if xVelocity != 0 and player.playerSprite.currentAnimation != ANIMATION_RUNNING
+			player.playerSprite.gotoAndPlay ANIMATION_RUNNING
+		else if xVelocity == 0 and player.playerSprite.currentAnimation != ANIMATION_IDLE
+			player.playerSprite.gotoAndPlay ANIMATION_IDLE
+			
 		
 		player.x = Math.floor(player.x / 100) * 100 + 10 if player.ranLeftIntoWall()
 		if player.ranRightIntoWall()
 			baseInt = Math.floor(player.x / 100)
 			modifier = if baseInt % 7 == 6 then 10 else 0
 			player.x = baseInt * 100 + 100 - player.constructor.WIDTH - modifier
+		
+		
