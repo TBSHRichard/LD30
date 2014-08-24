@@ -6,7 +6,7 @@ class window.Door extends createjs.Shape
 	@ORIENTATION_LANDSCAPE = 3
 	@ORIENTATION_PORTRAIT = 4
 	
-	constructor: (@x, @y, @collisionLayer, @color, @isOpen, @orientation) ->
+	constructor: (@x, @y, @levelWindow, @color, @isOpen, @orientation) ->
 		@initialize()
 	
 	initialize: ->
@@ -18,22 +18,16 @@ class window.Door extends createjs.Shape
 			when @constructor.COLOR_BLUE then "#00f"
 			
 		if @orientation == @constructor.ORIENTATION_LANDSCAPE
-			rectWidth = 90
-			rectHeight = 10
+			@rectWidth = 90
+			@rectHeight = 10
 			@x += 10
 			@y -= 10
 		else
-			rectWidth = 10
-			rectHeight = 90
+			@rectWidth = 10
+			@rectHeight = 90
 		
 		@graphics.beginFill c
-		@graphics.drawRect 0, 0, rectWidth, rectHeight
-		
-		@hitBox = new createjs.Shape()
-		@hitBox.x = @x
-		@hitBox.y = @y
-		@hitBox.graphics.beginFill "#000"
-		@hitBox.graphics.drawRect 0, 0, rectWidth, rectHeight
+		@graphics.drawRect 0, 0, @rectWidth, @rectHeight
 		
 		@resetAppearance()
 	
@@ -44,7 +38,5 @@ class window.Door extends createjs.Shape
 	resetAppearance: ->
 		if @isOpen
 			@alpha = 0.3
-			@collisionLayer.removeChild @hitBox
 		else
 			@alpha = 1
-			@collisionLayer.addChild @hitBox
