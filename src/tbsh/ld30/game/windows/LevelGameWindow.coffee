@@ -8,6 +8,7 @@ class window.LevelGameWindow extends GameWindow
 		@doors = []
 		
 		@setupCollisionMap()
+		@setupPedestalBitmap()
 		@setupDoorLayer()
 		@drawDoorsToCollisionMap()
 		@setupPlayers()
@@ -240,6 +241,19 @@ class window.LevelGameWindow extends GameWindow
 				@collisionMap.graphics.beginFill "#000"
 				@collisionMap.graphics.drawRect door.x, door.y, door.rectWidth, door.rectHeight
 				@collisionMap.graphics.endFill()
+	
+	setupPedestalBitmap: ->
+		@pedestalBitmapLayer = new createjs.Container()
+		
+		@pedestalBitmapLayer.addChild new createjs.Bitmap @assetQueue.getResult "pedestals"
+		
+		@addChild @pedestalBitmapLayer
+		
+		overlayShape = new createjs.Shape()
+		overlayShape.graphics.beginFill "#000"
+		overlayShape.graphics.drawRect 0, 0, 2100, 600
+		overlayShape.alpha = 0.05
+		@addChild overlayShape
 	
 	setupDoorLayer: ->
 		@doorLayer = new createjs.Container()

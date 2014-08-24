@@ -1,5 +1,6 @@
 FILENAMES = [
 	"foreground"
+	"pedestals"
 ]
 
 WIDTH = 700

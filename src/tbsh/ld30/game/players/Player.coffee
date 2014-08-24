@@ -1,7 +1,7 @@
 WIDTH = 35
 HEIGHT = 60
 DECEL = 4
-JUMP_VELOCITY = -35
+JUMP_VELOCITY = -33
 MAX_Y_VELOCITY = 15
 X_VELOCITY = 10
 JUMP_KEY = 38
@@ -13,6 +13,7 @@ class window.Player extends createjs.Shape
 		@orb = null
 		@xVelocity = 0
 		@yVelocity = 0
+		@jumpCooldown = 0
 		@jumpIsCoolingDown = @isMovingLeft = @isMovingRight = false
 		
 		@initialize()
@@ -27,8 +28,9 @@ class window.Player extends createjs.Shape
 		
 		$(document).keydown (e) ->
 				if e.keyCode == JUMP_KEY
-					if not player.jumpIsCoolingDown and player.onTheGround()
+					if not player.jumpIsCoolingDown and player.jumpCooldown is 0 and player.onTheGround()
 						player.jumpIsCoolingDown = true
+						player.jumpCooldown = 4
 						player.y -= 3
 						player.yVelocity = JUMP_VELOCITY
 				if e.keyCode == MOVE_LEFT_KEY
@@ -55,8 +57,8 @@ class window.Player extends createjs.Shape
 			pedestal.removeOrb()
 	
 	onTheGround: ->
-		@collisionMap.hitTest(@x+2, @y+HEIGHT) or @collisionMap.hitTest(@x+2, @y+HEIGHT-15) or
-			@collisionMap.hitTest(@x+WIDTH-2, @y+HEIGHT) or @collisionMap.hitTest(@x+WIDTH-2, @y+HEIGHT-15)
+		@collisionMap.hitTest(@x+2, @y+HEIGHT) or @collisionMap.hitTest(@x+2, @y+HEIGHT-5) or @collisionMap.hitTest(@x+2, @y+HEIGHT-15) or
+			@collisionMap.hitTest(@x+WIDTH-2, @y+HEIGHT) or @collisionMap.hitTest(@x+WIDTH-2, @y+HEIGHT-5) or @collisionMap.hitTest(@x+WIDTH-2, @y+HEIGHT-15)
 	
 	hitHead: ->
 		@yVelocity < 0 and (@collisionMap.hitTest(@x+2, @y) or @collisionMap.hitTest(@x+WIDTH-2, @y))
@@ -80,6 +82,8 @@ class window.Player extends createjs.Shape
 			if player.yVelocity > 0
 				player.y = Math.floor(player.y / 100) * 100 + (90 - HEIGHT)
 				player.yVelocity = 0
+			
+			player.jumpCooldown -= 1 if player.jumpCooldown > 0
 		
 		player.x -= X_VELOCITY if player.isMovingLeft
 		player.x += X_VELOCITY if player.isMovingRight
