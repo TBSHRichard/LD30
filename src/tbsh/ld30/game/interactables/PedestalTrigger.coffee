@@ -1,7 +1,9 @@
 DIMEN = 35
 
-class window.PedestalTrigger
-	constructor: (@id, @x, @y, @levelWindow, @assetQueue, @bitmapLayer) ->
+class window.PedestalTrigger extends Trigger
+	constructor: (@id, x, y, @levelWindow, @assetQueue, @bitmapLayer) ->
+		super x, y, DIMEN, DIMEN
+		
 		@orbColor = null
 		@linkedPedestal = null
 		@linkedDoors = []
@@ -34,28 +36,12 @@ class window.PedestalTrigger
 		@orbColor = null
 		@bitmapLayer.removeChild @orbBitmap
 	
-	watchPlayer: (player) ->
-		createjs.Ticker.on "tick", @onTick, null, false, {player: player, trigger: this}
-	
-	unwatchPlayer: ->
-		createjs.Ticker.off "tick", @onTick
-	
 	onTick: (e, data) ->
+		super e, data
 		player = data.player
 		trigger = data.trigger
 		
-		playerLeft = player.x + 2
-		playerRight = player.x + Player.WIDTH - 2
-		playerTop = player.y
-		playerBottom = player.y + Player.HEIGHT
-		
-		triggerLeft = trigger.x - DIMEN/2
-		triggerRight = trigger.x + DIMEN/2
-		triggerTop = trigger.y - DIMEN/2
-		triggerBottom = trigger.y + DIMEN/2
-		
-		if ((playerLeft > triggerLeft and playerLeft < triggerRight) or (playerRight > triggerLeft and playerRight < triggerRight)) and
-		((playerBottom > triggerTop and playerBottom < triggerBottom) or (playerTop > triggerTop and playerTop < triggerBottom))
+		if @isTriggered
 			player.setNearbyPedestal trigger
 		else
 			player.removeNearbyPedestal trigger
