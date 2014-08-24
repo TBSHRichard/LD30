@@ -68,11 +68,12 @@ class window.Player extends createjs.Container
 	
 	interact: (pedestal) ->
 		unless @orbColor is null
-			pedestal.setOrbColor @orbColor
-			pedestal.linkedPedestal.setOrbColor @orbColor
-			@removeChild @orbBitmap
-			@orbColor = null
-			@levelWindow.drawDoorsToCollisionMap()
+			if pedestal.orbColor is null
+				pedestal.setOrbColor @orbColor
+				pedestal.linkedPedestal.setOrbColor @orbColor
+				@removeChild @orbBitmap
+				@orbColor = null
+				@levelWindow.drawDoorsToCollisionMap()
 		else
 			@orbColor = pedestal.orbColor
 			
