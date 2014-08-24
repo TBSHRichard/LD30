@@ -1,6 +1,9 @@
 FILENAMES = [
 	"foreground"
 	"pedestals"
+	"redOrb"
+	"greenOrb"
+	"blueOrb"
 ]
 
 WIDTH = 700

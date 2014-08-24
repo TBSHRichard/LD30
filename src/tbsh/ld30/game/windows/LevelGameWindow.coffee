@@ -13,6 +13,7 @@ class window.LevelGameWindow extends GameWindow
 		@drawDoorsToCollisionMap()
 		@setupPlayers()
 		@setupForeground()
+		@setupPedestalTriggers()
 	
 	setupCollisionMap: ->
 		shape = new createjs.Shape()
@@ -183,10 +184,10 @@ class window.LevelGameWindow extends GameWindow
 		g.lineTo(1400.0, 200.0)
 		g.lineTo(1410.0, 200.0)
 		g.lineTo(1410.0, 10.0)
-		g.lineTo(1500.0, 10.0)
-		g.lineTo(1500.0, 200.0)
-		g.lineTo(1510.0, 200.0)
-		g.lineTo(1510.0, 10.0)
+		g.lineTo(1600.0, 10.0)
+		g.lineTo(1600.0, 200.0)
+		g.lineTo(1610.0, 200.0)
+		g.lineTo(1610.0, 10.0)
 		g.lineTo(2090.0, 10.0)
 		g.lineTo(2090.0, 90.0)
 		g.lineTo(2010.0, 90.0)
@@ -258,49 +259,72 @@ class window.LevelGameWindow extends GameWindow
 	setupDoorLayer: ->
 		@doorLayer = new createjs.Container()
 		
+		@pedestal1ADoors = []
+		@pedestal1BDoors = []
+		@pedestal1CDoors = []
+		@pedestal1EDoors = []
+		@pedestal1GDoors = []
+		@pedestal1JDoors = []
+		@pedestal2ADoors = []
+		@pedestal2DDoors = []
+		@pedestal2FDoors = []
+		@pedestal3ADoors = []
+		@pedestal3BDoors = []
+		@pedestal3CDoors = []
+		@pedestal3EDoors = []
+		@pedestal3FDoors = []
+		@pedestal3GDoors = []
+		@pedestal3HDoors = []
+		@pedestal3IDoors = []
+		
 		# Room 1 - Top
-		@addDoorToLayer new Door 100, 100, this, Door.COLOR_GREEN, true, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 200, 200, this, Door.COLOR_RED, false, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 400, 100, this, Door.COLOR_GREEN, true, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 500, 100, this, Door.COLOR_GREEN, true, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 500, 200, this, Door.COLOR_GREEN, true, Door.ORIENTATION_PORTRAIT
+		@pedestal1ADoors.push @addDoorToLayer new Door 100, 100, this, Color.GREEN, true, Orientation.PORTRAIT
+		@pedestal1BDoors.push @addDoorToLayer new Door 200, 200, this, Color.RED, false, Orientation.PORTRAIT
+		@pedestal1CDoors.push @addDoorToLayer new Door 400, 100, this, Color.GREEN, true, Orientation.PORTRAIT
+		@pedestal1CDoors.push @addDoorToLayer new Door 500, 100, this, Color.GREEN, true, Orientation.PORTRAIT
+		@pedestal1EDoors.push @addDoorToLayer new Door 500, 200, this, Color.GREEN, true, Orientation.PORTRAIT
 		
 		# Room 1 - Bottom
-		@addDoorToLayer new Door 100, 500, this, Door.COLOR_RED, false, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 500, 500, this, Door.COLOR_GREEN, false, Door.ORIENTATION_PORTRAIT
+		@pedestal1GDoors.push @addDoorToLayer new Door 100, 500, this, Color.RED, false, Orientation.PORTRAIT
+		@pedestal1JDoors.push @addDoorToLayer new Door 500, 500, this, Color.GREEN, false, Orientation.PORTRAIT
 		
 		# Room 2 - Top
-		@addDoorToLayer new Door 900, 200, this, Door.COLOR_GREEN, false, Door.ORIENTATION_LANDSCAPE
+		@pedestal2ADoors.push @addDoorToLayer new Door 900, 200, this, Color.GREEN, false, Orientation.LANDSCAPE
 		
 		# Room 2 - Bottom
-		@addDoorToLayer new Door 1000, 500, this, Door.COLOR_GREEN, false, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 1300, 500, this, Door.COLOR_BLUE, false, Door.ORIENTATION_PORTRAIT
+		@pedestal2DDoors.push @addDoorToLayer new Door 1000, 500, this, Color.GREEN, false, Orientation.PORTRAIT
+		@pedestal2FDoors.push @addDoorToLayer new Door 1300, 500, this, Color.BLUE, false, Orientation.PORTRAIT
 		
 		# Room 3 - Top
-		@addDoorToLayer new Door 1500, 200, this, Door.COLOR_RED, false, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 1700, 200, this, Door.COLOR_BLUE, true, Door.ORIENTATION_LANDSCAPE
-		@addDoorToLayer new Door 1800, 200, this, Door.COLOR_GREEN, true, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 2000, 200, this, Door.COLOR_BLUE, false, Door.ORIENTATION_PORTRAIT
+		redDoorTop = @addDoorToLayer new Door 1500, 200, this, Color.RED, false, Orientation.PORTRAIT
+		@pedestal3ADoors.push redDoorTop
+		@pedestal3BDoors.push redDoorTop
+		@pedestal3CDoors.push @addDoorToLayer new Door 1700, 200, this, Color.BLUE, true, Orientation.LANDSCAPE
+		@pedestal3CDoors.push @addDoorToLayer new Door 1800, 200, this, Color.GREEN, true, Orientation.PORTRAIT
+		@pedestal3EDoors.push @addDoorToLayer new Door 2000, 200, this, Color.BLUE, false, Orientation.PORTRAIT
 		
 		# Room 3 - Bottom
-		@addDoorToLayer new Door 1500, 500, this, Door.COLOR_RED, true, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 1600, 500, this, Door.COLOR_BLUE, false, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 1800, 500, this, Door.COLOR_GREEN, false, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 1800, 400, this, Door.COLOR_RED, false, Door.ORIENTATION_PORTRAIT
-		@addDoorToLayer new Door 1800, 400, this, Door.COLOR_RED, false, Door.ORIENTATION_LANDSCAPE
+		@pedestal3FDoors.push @addDoorToLayer new Door 1600, 500, this, Color.RED, true, Orientation.PORTRAIT
+		blueDoorBottom = @addDoorToLayer new Door 1600, 500, this, Color.BLUE, false, Orientation.PORTRAIT
+		@pedestal3FDoors.push blueDoorBottom
+		@pedestal3GDoors.push blueDoorBottom
+		@pedestal3HDoors.push @addDoorToLayer new Door 1800, 500, this, Color.GREEN, false, Orientation.PORTRAIT
+		@pedestal3IDoors.push @addDoorToLayer new Door 1800, 400, this, Color.RED, false, Orientation.PORTRAIT
+		@pedestal3IDoors.push @addDoorToLayer new Door 1800, 400, this, Color.RED, false, Orientation.LANDSCAPE
 		
 		@addChild @doorLayer
 	
 	addDoorToLayer: (door) ->
 		@doorLayer.addChild door
 		@doors.push door
+		return door
 	
 	setupPlayers: ->
-		@topPlayer = new TopDimensionPlayer @collisionMap
+		@topPlayer = new TopDimensionPlayer this, @collisionMap, @assetQueue
 		@topPlayer.x = 25
 		@topPlayer.y = 220
 		
-		@bottomPlayer = new BottomDimensionPlayer @collisionMap
+		@bottomPlayer = new BottomDimensionPlayer this, @collisionMap, @assetQueue
 		@bottomPlayer.x = 25
 		@bottomPlayer.y = 520
 		
@@ -309,3 +333,42 @@ class window.LevelGameWindow extends GameWindow
 	
 	setupForeground: ->
 		@addChild new createjs.Bitmap @assetQueue.getResult "foreground"
+	
+	setupPedestalTriggers: ->
+		# Room 1 A & F
+		@room1TopPedestals = []
+		@room1BottomPedestals = []
+		
+		pedestal1A = new PedestalTrigger "1A", 150, 125, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1A.setLinkedDoors @pedestal1ADoors
+		@room1TopPedestals.push pedestal1A
+		
+		pedestal1F = new PedestalTrigger "1F", 150, 425, this, @assetQueue, @pedestalBitmapLayer
+		@room1BottomPedestals.push pedestal1F
+		
+		pedestal1A.setLinkedPedestal pedestal1F
+		pedestal1F.setLinkedPedestal pedestal1A
+		
+		# Room 1 B & G
+		pedestal1B = new PedestalTrigger "1B", 150, 225, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1B.setLinkedDoors @pedestal1BDoors
+		@room1TopPedestals.push pedestal1B
+		
+		pedestal1G = new PedestalTrigger "1G", 150, 525, this, @assetQueue, @pedestalBitmapLayer
+		pedestal1G.setLinkedDoors @pedestal1GDoors
+		@room1BottomPedestals.push pedestal1G
+		
+		pedestal1B.setLinkedPedestal pedestal1G
+		pedestal1G.setLinkedPedestal pedestal1B
+		
+		pedestal1A.setOrbColor Color.RED
+		pedestal1F.setOrbColor Color.RED
+		
+		@watchPedestalTriggersInRoom1()
+	
+	watchPedestalTriggersInRoom1: ->
+		for trigger in @room1TopPedestals
+			trigger.watchPlayer @topPlayer
+		
+		for trigger in @room1BottomPedestals
+			trigger.watchPlayer @bottomPlayer

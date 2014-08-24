@@ -1,5 +1,3 @@
-WIDTH = 35
-HEIGHT = 60
 DECEL = 4
 JUMP_VELOCITY = -33
 MAX_Y_VELOCITY = 15
@@ -8,79 +6,119 @@ JUMP_KEY = 38
 MOVE_LEFT_KEY = 37
 MOVE_RIGHT_KEY = 39
 
-class window.Player extends createjs.Shape
-	constructor: (@collisionMap, @spriteSheet, @interactionKey) ->
-		@orb = null
+class window.Player extends createjs.Container
+	@WIDTH = 35
+	@HEIGHT = 60
+	constructor: (@levelWindow, @collisionMap, @assetQueue, @spriteSheet, @interactionKey) ->
+		@orbColor = null
+		@nearbyPedestal = null
 		@xVelocity = 0
 		@yVelocity = 0
 		@jumpCooldown = 0
-		@jumpIsCoolingDown = @isMovingLeft = @isMovingRight = false
+		@jumpIsCoolingDown = @interactionIsCoolingDown = @isMovingLeft = @isMovingRight = false
 		
 		@initialize()
 	
 	initialize: ->
 		super
 		
-		@graphics.beginFill "#0ff"
-		@graphics.drawRect 0, 0, WIDTH, HEIGHT
+		@playerSprite = new createjs.Shape
+		@playerSprite.graphics.beginFill "#0ff"
+		@playerSprite.graphics.drawRect 0, 0, @constructor.WIDTH, @constructor.HEIGHT
+		@addChild @playerSprite
 		
 		player = this
 		
 		$(document).keydown (e) ->
-				if e.keyCode == JUMP_KEY
-					if not player.jumpIsCoolingDown and player.jumpCooldown is 0 and player.onTheGround()
-						player.jumpIsCoolingDown = true
-						player.jumpCooldown = 4
-						player.y -= 3
-						player.yVelocity = JUMP_VELOCITY
-				if e.keyCode == MOVE_LEFT_KEY
-					player.isMovingLeft = true
-				if e.keyCode == MOVE_RIGHT_KEY
-					player.isMovingRight = true
+			if e.keyCode == JUMP_KEY
+				if not player.jumpIsCoolingDown and player.jumpCooldown is 0 and player.onTheGround()
+					player.jumpIsCoolingDown = true
+					player.jumpCooldown = 4
+					player.y -= 3
+					player.yVelocity = JUMP_VELOCITY
+			if e.keyCode == MOVE_LEFT_KEY
+				player.isMovingLeft = true
+			if e.keyCode == MOVE_RIGHT_KEY
+				player.isMovingRight = true
+			if e.keyCode == player.interactionKey
+				unless player.interactionIsCoolingDown or player.nearbyPedestal is null
+					player.interactionIsCoolingDown = true
+					player.interact player.nearbyPedestal
 		
 		$(document).keyup (e) ->
-				if e.keyCode == JUMP_KEY
-					player.jumpIsCoolingDown = false
-				if e.keyCode == MOVE_LEFT_KEY
-					player.isMovingLeft = false
-				if e.keyCode == MOVE_RIGHT_KEY
-					player.isMovingRight = false
+			if e.keyCode == JUMP_KEY
+				player.jumpIsCoolingDown = false
+			if e.keyCode == MOVE_LEFT_KEY
+				player.isMovingLeft = false
+			if e.keyCode == MOVE_RIGHT_KEY
+				player.isMovingRight = false
+			if e.keyCode == player.interactionKey
+				player.interactionIsCoolingDown = false
 		
 		createjs.Ticker.on "tick", @onTick, null, false, {player: this}
 	
+	setNearbyPedestal: (nearbyPedestal) ->
+		if @nearbyPedestal is null
+			@nearbyPedestal = nearbyPedestal
+	
+	removeNearbyPedestal: (nearbyPedestal) ->
+		unless @nearbyPedestal is null
+			@nearbyPedestal = null if @nearbyPedestal.id == nearbyPedestal.id
+	
 	interact: (pedestal) ->
-		unless @orb is null
-			pedestal.setOrb @orb
-			@orb = null
+		unless @orbColor is null
+			pedestal.setOrbColor @orbColor
+			pedestal.linkedPedestal.setOrbColor @orbColor
+			@removeChild @orbBitmap
+			@orbColor = null
+			@levelWindow.drawDoorsToCollisionMap()
 		else
-			@orb = pedestal.orb
+			@orbColor = pedestal.orbColor
+			
+			asset = switch @orbColor
+				when Color.RED then @assetQueue.getResult "redOrb"
+				when Color.GREEN then @assetQueue.getResult "greenOrb"
+				when Color.BLUE then @assetQueue.getResult "blueOrb"
+			
+			@orbBitmap = new createjs.Bitmap asset
+			@orbBitmap.regX = 35/2
+			@orbBitmap.regY = 35/2
+			@orbBitmap.x = -20
+			@orbBitmap.y = 5
+			@addChild @orbBitmap
+			
 			pedestal.removeOrb()
+			pedestal.linkedPedestal.removeOrb()
+			@levelWindow.drawDoorsToCollisionMap()
 	
 	onTheGround: ->
-		@collisionMap.hitTest(@x+2, @y+HEIGHT) or @collisionMap.hitTest(@x+2, @y+HEIGHT-5) or @collisionMap.hitTest(@x+2, @y+HEIGHT-15) or
-			@collisionMap.hitTest(@x+WIDTH-2, @y+HEIGHT) or @collisionMap.hitTest(@x+WIDTH-2, @y+HEIGHT-5) or @collisionMap.hitTest(@x+WIDTH-2, @y+HEIGHT-15)
+		@collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT) or @collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT-5) or @collisionMap.hitTest(@x+2, @y+@constructor.HEIGHT-15) or
+			@collisionMap.hitTest(@x+@constructor.WIDTH-2, @y+@constructor.HEIGHT) or @collisionMap.hitTest(@x+@constructor.WIDTH-2, @y+@constructor.HEIGHT-5) or @collisionMap.hitTest(@x+@constructor.WIDTH-2, @y+@constructor.HEIGHT-15)
 	
-	hitHead: ->
-		@yVelocity < 0 and (@collisionMap.hitTest(@x+2, @y) or @collisionMap.hitTest(@x+WIDTH-2, @y))
+	inTheCeiling: ->
+		@collisionMap.hitTest(@x+2, @y) or @collisionMap.hitTest(@x+2, @y+10) or @collisionMap.hitTest(@x+2, @y+20) or
+			@collisionMap.hitTest(@x+@constructor.WIDTH-2, @y) or @collisionMap.hitTest(@x+@constructor.WIDTH-2, @y+10) or @collisionMap.hitTest(@x+@constructor.WIDTH-2, @y+20)
 	
 	ranLeftIntoWall: ->
-		@collisionMap.hitTest(@x, @y+HEIGHT/2)
+		@collisionMap.hitTest(@x, @y+@constructor.HEIGHT/2)
 	
 	ranRightIntoWall: ->
-		@collisionMap.hitTest(@x+WIDTH-10, @y+HEIGHT/2)
+		@collisionMap.hitTest(@x+@constructor.WIDTH-10, @y+@constructor.HEIGHT/2)
 	
 	onTick: (e, data) ->
 		player = data.player
+		onTheGround = player.onTheGround()
+		inTheCeiling = player.inTheCeiling()
 		
-		unless player.onTheGround()
+		unless onTheGround
 			player.yVelocity += DECEL if player.yVelocity < MAX_Y_VELOCITY
 			
-			if player.hitHead()
+			if player.yVelocity < 0 and inTheCeiling
 				#player.y = Math.ceil(player.y / 100) * 100
 				player.yVelocity *= -1
 		else
-			if player.yVelocity > 0
-				player.y = Math.floor(player.y / 100) * 100 + (90 - HEIGHT)
+			if player.yVelocity > 0 and not inTheCeiling
+				player.y = Math.floor(player.y / 100) * 100 + (90 - player.constructor.HEIGHT)
 				player.yVelocity = 0
 			
 			player.jumpCooldown -= 1 if player.jumpCooldown > 0
@@ -90,4 +128,4 @@ class window.Player extends createjs.Shape
 		player.y += player.yVelocity
 		
 		player.x = Math.floor(player.x / 100) * 100 + 10 if player.ranLeftIntoWall()
-		player.x = Math.floor(player.x / 100) * 100 + 100 - WIDTH if player.ranRightIntoWall()
+		player.x = Math.floor(player.x / 100) * 100 + 100 - player.constructor.WIDTH if player.ranRightIntoWall()

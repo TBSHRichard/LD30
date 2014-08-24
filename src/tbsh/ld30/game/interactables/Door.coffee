@@ -1,11 +1,4 @@
 class window.Door extends createjs.Shape
-	@COLOR_RED = 0
-	@COLOR_GREEN = 1
-	@COLOR_BLUE = 2
-
-	@ORIENTATION_LANDSCAPE = 3
-	@ORIENTATION_PORTRAIT = 4
-	
 	constructor: (@x, @y, @levelWindow, @color, @isOpen, @orientation) ->
 		@initialize()
 	
@@ -13,11 +6,11 @@ class window.Door extends createjs.Shape
 		super
 		
 		c = switch @color
-			when @constructor.COLOR_RED then "#f00"
-			when @constructor.COLOR_GREEN then "#0f0"
-			when @constructor.COLOR_BLUE then "#00f"
+			when Color.RED then "#f00"
+			when Color.GREEN then "#0f0"
+			when Color.BLUE then "#00f"
 			
-		if @orientation == @constructor.ORIENTATION_LANDSCAPE
+		if @orientation == Orientation.LANDSCAPE
 			@rectWidth = 90
 			@rectHeight = 10
 			@x += 10

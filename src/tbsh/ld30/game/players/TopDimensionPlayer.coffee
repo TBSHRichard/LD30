@@ -1,3 +1,3 @@
 class window.TopDimensionPlayer extends Player
-	constructor: (collisionMap) ->
-		super collisionMap, null, 90
+	constructor: (levelWindow, collisionMap, assetQueue) ->
+		super levelWindow, collisionMap, assetQueue, null, 90
