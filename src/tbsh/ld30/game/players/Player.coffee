@@ -115,8 +115,8 @@ class window.Player extends createjs.Container
 			player.yVelocity += DECEL if player.yVelocity < MAX_Y_VELOCITY
 			
 			if player.yVelocity < 0 and inTheCeiling
-				#player.y = Math.ceil(player.y / 100) * 100
-				player.yVelocity *= -1
+				player.yVelocity = 1
+				# player.yVelocity *= -1
 		else
 			if player.yVelocity > 0 and not inTheCeiling
 				player.y = Math.floor(player.y / 100) * 100 + (90 - player.constructor.HEIGHT)
