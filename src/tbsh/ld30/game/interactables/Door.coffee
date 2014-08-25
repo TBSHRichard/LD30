@@ -1,16 +1,28 @@
-class window.Door extends createjs.Shape
-	constructor: (@x, @y, @levelWindow, @color, @isOpen, @orientation) ->
+class window.Door extends createjs.Sprite
+	constructor: (@x, @y, @levelWindow, @color, @isOpen, @orientation, @doorAsset) ->
 		@initialize()
 	
 	initialize: ->
-		super
+		spriteSheet = new createjs.SpriteSheet {
+			images: [@doorAsset]
+			frames: {width: 10, height: 90}
+			animations: {
+				open: {
+					frames: [0, 1, 2, 3]
+					next: false
+				}
+				close: {
+					frames: [3, 2, 1, 0]
+					next: false
+				}
+			}
+		}
 		
-		c = switch @color
-			when Color.RED then "#f00"
-			when Color.GREEN then "#0f0"
-			when Color.BLUE then "#00f"
+		super spriteSheet
 			
 		if @orientation == Orientation.LANDSCAPE
+			@rotation = 90
+			@scaleY = -1
 			@rectWidth = 90
 			@rectHeight = 10
 			@x += 10
@@ -18,9 +30,6 @@ class window.Door extends createjs.Shape
 		else
 			@rectWidth = 10
 			@rectHeight = 90
-		
-		@graphics.beginFill c
-		@graphics.drawRect 0, 0, @rectWidth, @rectHeight
 		
 		@resetAppearance()
 	
@@ -30,6 +39,6 @@ class window.Door extends createjs.Shape
 		
 	resetAppearance: ->
 		if @isOpen
-			@alpha = 0.3
+			@gotoAndPlay "open"
 		else
-			@alpha = 1
+			@gotoAndPlay "close"

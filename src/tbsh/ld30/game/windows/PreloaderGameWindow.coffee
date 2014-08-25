@@ -1,4 +1,5 @@
 FILENAMES = [
+	"background"
 	"foreground"
 	"pedestals"
 	"redOrb"
@@ -9,6 +10,12 @@ FILENAMES = [
 	"xPickup"
 	"zPlace"
 	"zPickup"
+	"doorTopRed"
+	"doorTopGreen"
+	"doorTopBlue"
+	"doorBottomRed"
+	"doorBottomGreen"
+	"doorBottomBlue"
 ]
 
 WIDTH = 700

@@ -35,10 +35,6 @@ window.Main =
 		gameControlsLine.html "X - Pickup/Place Orb (Bottom Dimension)"
 		gameControls.append gameControlsLine
 		
-		gameControlsLine = $ document.createElement "p"
-		gameControlsLine.html "R - Restart Game"
-		gameControls.append gameControlsLine
-		
 		$("#gameContainer").html gameCanvas
 		$("#gameContainer").append gameControls
 		
